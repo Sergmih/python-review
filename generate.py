@@ -5,7 +5,9 @@ from sys import stdin
 
 
 def uploadmodel(path, d):
-    """creating dictionary with a model"""
+    """Создаем словарь с моделью, храним аналогичным образом, как в train.py. Первое слово в строке наш ключ, потом
+       через пробел пара val_chis что значит что слово val встречалось после слова key  chis раз. Разделяем функцией
+       split по _"""
     f = open(path)
     for x in f:
         x = x.split()
@@ -20,6 +22,8 @@ def uploadmodel(path, d):
 
 
 def generate(d, current, lenght, output):
+    """Функция генерирования, для каждого слова составляем список, в котором с нужной частотой встречаются слова,
+    которые могут идти после него в тексте. Далее функцией random.choise выбираеся следующее слово и сразу выводится"""
     if output != 'stdout':
         f = open(output, "w")
     print(current, ' ', end='')
@@ -42,6 +46,8 @@ parser.add_argument('--output', dest='output', default='stdout', help='path to o
 parser.add_argument('--seed', dest='seed', help='it is seed')
 
 dict= {}
+"""Вызываем функцию которая загружает модель, далее проверяем задано ли первое слово, если нет то выбираем его случайным
+   образом среди всех ключей словаря, записываем в current. Вызываем функцию генератора текста"""
 uploadmodel(parser.parse_args().model, dict)
 if parser.parse_args().seed:
     current = parser.parse_args().seed
