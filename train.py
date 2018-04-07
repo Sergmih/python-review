@@ -1,25 +1,24 @@
 import argparse
+import re
 import os
 from sys import stdin
 
 
 def func(str, lc, d):
-    newstr = ''
-    for l in str:
-        """string parser"""
-        if l.isalpha() or l == ' ' or (l == '-' and newstr[-1].isalpha()):
-            if lc:
-                l = l.lower()
-            newstr += l
-    words = newstr.split()
+    if lc:
+        str = str.lower()
+    words = re.findall(r'\w+', str)
+    """Парсим строку, оставляем только буквы, приводим к нижнему регистру если нужно"""
     for x in range(0, len(words) - 1):
-        """fill in the dictionary of dictionary with the model"""
+        """Для каждого слова смотрим есть ли в словаре такой ключ, есть ли значения у ключа, для каждого 
+           случая выполняем необходимые действия"""
         if not d.get(words[x]):
             d[words[x]] = {words[x+1]: 1}
         elif not d[words[x]].get(words[x+1]):
             d[words[x]][words[x+1]] = 1
         else:
             d[words[x]][words[x + 1]] += 1
+    """Возвращаем последнее слово строки, чтобы связать его с первым словом следующей строки"""
     return words[len(words) - 1]
 
 
