@@ -1,6 +1,7 @@
 import argparse
 import re
 import os
+import pickle
 from sys import stdin
 from collections import defaultdict
 
@@ -10,8 +11,7 @@ def create_model(current_str, islow, model_dict):
        1) current_str - str, переменная в котрой хранится последнее слово предыдущей строки
        2) islow - bool, проверка нужно ли приводить к нижнему регистру, True - если нужно
        3) model_dict - defaultdict(defaultdict(int)), словарь с моделью
-       Функция возвращает последнее слово в текущей строке (str)
-       """
+       Функция возвращает последнее слово в текущей строке (str)"""
     if islow:
         current_str = current_str.lower()
     words = re.findall(r'\w+', current_str)
@@ -48,12 +48,6 @@ if __name__ == '__main__':
                     new_string += ' ' + current_string
                     new_string = create_model(new_string, parser.parse_args().lc, model_dict)
                 f.close()
-    f = open(parser.parse_args().model, "w")
-    for x in model_dict:
-        f.write(x + " ")
-        for y in model_dict[x]:
-            """Записываем в файл модель. Для каждого слова key идет строка вида key val_chis где val это слово которое
-               встречалась после слова key, а chis это количество встречаний"""
-            f.write(y + "_" + str(model_dict[x][y]) + " ")
-        f.write("\n")
-    f.close()
+
+    with open(parser.parse_args().model, 'wb') as output:
+        pickle.dump(dict(model_dict), output)
