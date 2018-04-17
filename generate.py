@@ -6,9 +6,14 @@ from collections import defaultdict
 
 
 def upload_model(path, model_dict):
-    """Создаем словарь с моделью, храним аналогичным образом, как в train.py. Первое слово в строке наш ключ, потом
+    """Функция принимает 2 аргумента:
+       1) path - str, Путь до файла с моделью
+       2) model_dict - defaultdict(dict), словарь с моделью
+       Функция ничего не возвращает
+
+       Создаем словарь с моделью, храним аналогичным образом, как в train.py. Первое слово в строке наш ключ, потом
        через пробел пара val_chis что значит что слово val встречалось после слова key  chis раз. Разделяем функцией
-       split по _"""
+       split по '_' """
     f = open(path)
     for current_string in f:
         current_string = current_string.split()
@@ -18,17 +23,24 @@ def upload_model(path, model_dict):
             model_dict[key][values[0]] = values[1]
 
 
-def generate_text(d, current, lenght, output):
-    """Функция генерирования, для каждого слова составляем список, в котором с нужной частотой встречаются слова,
-    которые могут идти после него в тексте. Далее функцией random.choise выбираеся следующее слово и сразу выводится"""
+def generate_text(model_dict, current, lenght, output):
+    """Функция генерирования, принимает 4 аргумента:
+       1) model_dict - defaultdict(dict), словарь с моделью
+       2) current - str, слово для которого мы ищем пару
+       3) lenght - int, длина конечной последовательности
+       4) output - str, либо 'stdout', либо путь до файла, в который записывать текст
+       Функция ничего не возвращает
+
+       для каждого слова составляем список, в котором с нужной частотой встречаются слова,которые могут идти
+       после него в тексте. Далее функцией random.choise выбираеся следующее слово и сразу выводится"""
     if output != 'stdout':
         sys.stdout = open(output, 'w')
     else:
         print(current, ' ', end='')
     for i in range(1, lenght):
         generation_list = []
-        for value in d[current]:
-            for j in range(int(d[current][value])):
+        for value in model_dict[current]:
+            for j in range(int(model_dict[current][value])):
                 generation_list.append(value)
         current = random.choice(generation_list)
         print(current, ' ', end='')
@@ -47,6 +59,6 @@ upload_model(parser.parse_args().model, model_dict)
 if parser.parse_args().seed:
     current = parser.parse_args().seed
 else:
-    """if no seed then random"""
+    """генерируем seed, если его не указали"""
     current = random.choice(list(model_dict.keys()))
 generate_text(model_dict, current, parser.parse_args().lenght, parser.parse_args().output)
