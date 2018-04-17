@@ -2,6 +2,7 @@ import argparse
 import re
 import os
 from sys import stdin
+from collections import defaultdict
 
 
 def create_model(current_str, islow, model_dict):
@@ -13,12 +14,9 @@ def create_model(current_str, islow, model_dict):
         """Составляем словарь с моделью, для каждого слова свой подсловарь в котором частота вхождений других слов после 
            текущего. Для каждого слова смотрим есть ли в словаре такой ключ, есть ли значения у ключа, для каждого 
            случая выполняем необходимые действия"""
-        if not model_dict.get(words[x]):
-            model_dict[words[x]] = {words[x+1]: 1}
-        elif not model_dict[words[x]].get(words[x+1]):
-            model_dict[words[x]][words[x+1]] = 1
-        else:
-            model_dict[words[x]][words[x + 1]] += 1
+        if model_dict.get(words[x]):
+            model_dict[words[x]][words[x + 1]] = 0
+        model_dict[words[x]][words[x + 1]] += 1
     """Возвращаем последнее слово строки, чтобы связать его с первым словом следующей строки"""
     return words[len(words) - 1]
 
@@ -28,7 +26,7 @@ parser.add_argument('--input-dir', dest='dir', default='stdin', help='directory 
 parser.add_argument('--model', dest='model',required=True, help='path to file with model')
 parser.add_argument('--lc', action = 'store_true', help='is lowercase?')
 
-model_dict = {}
+model_dict = defaultdict(lambda: defaultdict(int))
 if parser.parse_args().dir == 'stdin':
     new_string = ''
     for current_string in stdin:
