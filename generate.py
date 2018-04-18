@@ -41,7 +41,9 @@ def generate_text(model_dict, current, lenght, output):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Программа на основе заданной модели генерирует текст заданной длины."
+                                                 " Для текста можно указать начальное слово, иначе оно выберется "
+                                                 "автоматически")
     parser.add_argument('--lenght', dest='lenght', type=int, help='lenght of generated text')
     parser.add_argument('--model', dest='model', required=True, help='path to file with model')
     parser.add_argument('--output', dest='output', default='stdout', help='path to output file')

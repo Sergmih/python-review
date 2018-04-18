@@ -25,7 +25,11 @@ def create_model(current_str, islow, model_dict):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Программа которая на основе заданных текстов составляет модель, "
+                                                 "с помощью которой работает generate.py. Тексты можно писать в "
+                                                 "консоль, либо указывать путь до директории с файлами, из которой "
+                                                 "будут проанализированны все файлы с расширением '.txt'. Можно "
+                                                 "опционально приводить тексты в нижнему регистру.")
     parser.add_argument('--input-dir', dest='dir', default='stdin', help='directory path')
     parser.add_argument('--model', dest='model',required=True, help='path to file with model')
     parser.add_argument('--lc', action = 'store_true', help='is lowercase?')
