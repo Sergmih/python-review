@@ -4,6 +4,7 @@ import os
 import sys
 import pickle
 from collections import defaultdict
+import numpy
 
 
 def upload_model(path):
@@ -33,10 +34,17 @@ def generate_text(model_dict, current, lenght, output):
         print(current, ' ', end='')
     for i in range(1, lenght):
         generation_list = []
+        frequency_list = []
+        cnt = 0
         for value in model_dict[current]:
-            for j in range(int(model_dict[current][value])):
-                generation_list.append(value)
-        current = random.choice(generation_list)
+            generation_list.append(value)
+            frequency_list.append(int(model_dict[current][value]))
+            cnt += int(model_dict[current][value])
+            #for j in range(int(model_dict[current][value])):
+            #    generation_list.append(value)
+        for j in range(1, len(frequency_list)):
+            frequency_list[j] /= cnt
+        current = numpy.random.choice(generation_list, 1, p=frequency_list)
         print(current, ' ', end='')
 
 
