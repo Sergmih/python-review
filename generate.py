@@ -30,20 +30,13 @@ def generate_text(model_dict, current, lenght, output):
        после него в тексте. Далее функцией random.choise выбираеся следующее слово и сразу выводится"""
     if output != 'stdout':
         sys.stdout = open(output, 'w')
-    else:
         print(current, ' ', end='')
     for i in range(1, lenght):
-        generation_list = []
-        frequency_list = []
-        cnt = 0
-        for value in model_dict[current]:
-            generation_list.append(value)
-            frequency_list.append(int(model_dict[current][value]))
-            cnt += int(model_dict[current][value])
-            #for j in range(int(model_dict[current][value])):
-            #    generation_list.append(value)
-        for j in range(1, len(frequency_list)):
-            frequency_list[j] /= cnt
+        generation_list = list(model_dict[current].keys())
+        frequency_list = list(model_dict[current].value())
+        numwords = sum(model_dict[current].value())
+        for j in range(0, len(frequency_list)):
+            frequency_list[j] /= numwords
         current = numpy.random.choice(generation_list, 1, p=frequency_list)
         print(current, ' ', end='')
 
