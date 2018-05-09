@@ -11,7 +11,6 @@ def upload_model(path):
     """Функция принимает 2 аргумента:
        1) path - str, Путь до файла с моделью
        Функция возвращает модель (defaultdict(dict))
-
        Считываем модель с помощью pickle """
     with open(path, 'rb') as input:
         model_dict = pickle.load(input)
@@ -57,7 +56,6 @@ if __name__ == '__main__':
     parser.add_argument('--model', dest='model', required=True, help='path to file with model')
     parser.add_argument('--output', dest='output', default='stdout', help='path to output file')
     parser.add_argument('--seed', dest='seed', help='it is seed')
-
     model_dict = defaultdict(dict)
     """Вызываем функцию которая загружает модель, далее проверяем задано 
     ли первое слово, если нет то выбираем его случайным образом среди всех 

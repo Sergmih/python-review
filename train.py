@@ -52,6 +52,5 @@ if __name__ == '__main__':
         for current_string in f:
             new_string += ' ' + current_string
             new_string = create_model(new_string, parser.parse_args().lc, model_dict)
-
     with open(parser.parse_args().model, 'wb') as output:
         pickle.dump(dict(model_dict), output)
