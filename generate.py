@@ -28,6 +28,8 @@ def generate_text(model_dict, current, lenght, output):
 
        для каждого слова составляем список, в котором с нужной частотой встречаются слова,которые могут идти
        после него в тексте. Далее функцией random.choise выбираеся следующее слово и сразу выводится"""
+    string_lenght = 10
+    current_lenght = 0
     if output != 'stdout':
         sys.stdout = open(output, 'w')
         print(current, ' ', end='')
@@ -38,7 +40,12 @@ def generate_text(model_dict, current, lenght, output):
         for j in range(0, len(frequency_list)):
             frequency_list[j] /= numwords
         current = numpy.random.choice(generation_list, 1, p=frequency_list)
-        print(current, ' ', end='')
+        text = current + ' '
+        current_lenght += 1
+        if current_lenght > string_lenght:
+            print(text)
+            text = ''
+            current_lenght = 0
 
 
 if __name__ == '__main__':
