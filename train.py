@@ -17,8 +17,8 @@ def create_model(current_str, islow, model_dict):
     words = re.findall(r'\w+', current_str)
     """Парсим строку, оставляем только буквы, приводим к нижнему регистру если нужно"""
     for x in range(0, len(words) - 1):
-        """Составляем словарь с моделью, для каждого слова свой подсловарь в котором частота вхождений других слов после 
-           текущего. Записываем эту частоту"""
+        """Составляем словарь с моделью, для каждого слова свой подсловарь в котором 
+        частота вхождений других слов после текущего. Записываем эту частоту"""
         model_dict[words[x]][words[x + 1]] += 1
     """Возвращаем последнее слово строки, чтобы связать его с первым словом следующей строки"""
     return words[len(words) - 1]
@@ -54,4 +54,4 @@ if __name__ == '__main__':
             new_string = create_model(new_string, parser.parse_args().lc, model_dict)
 
     with open(parser.parse_args().model, 'wb') as output:
-        print(model_dict)
+        pickle.dump(dict(model_dict), output)
