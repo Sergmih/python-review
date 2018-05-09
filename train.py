@@ -2,7 +2,7 @@ import argparse
 import re
 import os
 import pickle
-from sys import stdin
+import sys
 from collections import defaultdict
 
 
@@ -35,23 +35,23 @@ if __name__ == '__main__':
     parser.add_argument('--lc', action = 'store_true', help='is lowercase?')
 
     model_dict = defaultdict(lambda: defaultdict(int))
-    if parser.parse_args().dir == 'stdin':
-        new_string = ''
-        for current_string in stdin:
-            new_string = ' ' + current_string
-            """Добавляем в начало строки последнее слово предыдущей, которое получили на прошлом шаге цикла если 
-               цикл выполняется в первый раз, то добавится пробел, которые потом все равно обрежется. Вызываем функцию"""
-            new_string = create_model(new_string, parser.parse_args().lc, model_dict)
-    else:
+
+    list = []
+    if parser.parse_args().dir != 'stdin':
         for file in os.listdir(path=parser.parse_args().dir):
-            """Перебираем файлы в директории, если это текстовый файл, то открываем его и построчно считываем"""
             if file[-4:] == ".txt":
-                f = open(parser.parse_args().dir + '\\' + file)
-                new_string = ''
-                for current_string in f:
-                    new_string += ' ' + current_string
-                    new_string = create_model(new_string, parser.parse_args().lc, model_dict)
-                f.close()
+                list.append(file)
+    else:
+        list.append(sys.stdin)
+    for file in list:
+        try:
+            f = open(parser.parse_args().dir + '\\' + file)
+        except:
+            f = file
+        new_string = ''
+        for current_string in f:
+            new_string += ' ' + current_string
+            new_string = create_model(new_string, parser.parse_args().lc, model_dict)
 
     with open(parser.parse_args().model, 'wb') as output:
-        pickle.dump(dict(model_dict), output)
+        print(model_dict)
