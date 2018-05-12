@@ -48,12 +48,20 @@ def get_file(file):
     return fl
 
 
-def update_model_dict(fl):
+def update_model_dict(fl, model_dict):
     new_string = ''
     for current_string in fl:
         new_string += ' ' + current_string
         new_string = create_model(new_string,
                                   parser.parse_args().lc, model_dict)
+
+
+def rate_model(model_dict):
+    for tmp_dict in model_dict.keys():
+        numwords = sum(model_dict[tmp_dict].values())
+        for key in model_dict[tmp_dict]:
+            model_dict[tmp_dict][key] /= numwords
+
 
 
 if __name__ == '__main__':
@@ -76,8 +84,12 @@ if __name__ == '__main__':
 
     for file in file_list:
         f = get_file(file)
-        update_model_dict(f)
+        update_model_dict(f, model_dict)
+
+    rate_model(model_dict)
+
+
+
 
     with open(parser.parse_args().model, 'wb') as output:
         pickle.dump(dict(model_dict), output)
-

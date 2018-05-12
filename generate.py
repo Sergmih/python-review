@@ -35,9 +35,6 @@ def generate_text(model_dict, current, lenght, output):
     for i in range(1, lenght):
         generation_list = list(model_dict[current].keys())
         frequency_list = list(model_dict[current].value())
-        numwords = sum(model_dict[current].value())
-        for j in range(0, len(frequency_list)):
-            frequency_list[j] /= numwords
         current = numpy.random.choice(generation_list, 1, p=frequency_list)
         text += current + ' '
         current_lenght += 1
