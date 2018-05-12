@@ -17,7 +17,7 @@ def upload_model(path):
     return model_dict
 
 
-def generate_text(model_dict, current, lenght, output):
+def generate_text(model_dict, current, lenght, output, string_lenght):
     """Функция генерирования, принимает 4 аргумента:
        1) model_dict - defaultdict(dict), словарь с моделью
        2) current - str, слово для которого мы ищем пару
@@ -27,7 +27,6 @@ def generate_text(model_dict, current, lenght, output):
        для каждого слова составляем список, в котором с нужной частотой
         встречаются слова,которые могут идти после него в тексте. Далее
         функцией random.choise выбираеся следующее слово и сразу выводится"""
-    string_lenght = 10
     current_lenght = 0
     if output != 'stdout':
         sys.stdout = open(output, 'w')
@@ -57,6 +56,9 @@ if __name__ == '__main__':
     parser.add_argument('--output', dest='output', default='stdout',
                         help='path to output file')
     parser.add_argument('--seed', dest='seed', help='it is seed')
+    parser.add_argument('--string-lenght', dest='string_lenght', default='10',
+                        help='lenght of string in output, if not set than it will be 10')
+
     """Вызываем функцию которая загружает модель, далее проверяем задано
     ли первое слово, если нет то выбираем его случайным образом среди всех
     ключей словаря, записываем в current. Вызываем функцию генератора текста"""
@@ -67,4 +69,4 @@ if __name__ == '__main__':
         """генерируем seed, если его не указали"""
         current = random.choice(list(model_dict.keys()))
     generate_text(model_dict, current, parser.parse_args().lenght,
-                  parser.parse_args().output)
+                  parser.parse_args().output, parser.parse_args().string_lenght)
