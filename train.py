@@ -43,7 +43,7 @@ def create_file_list(dir):
 def get_file(file):
     try:
         fl = open(parser.parse_args().dir + '\\' + file)
-    except:
+    except Exception:
         fl = file
     return fl
 
@@ -63,7 +63,6 @@ def rate_model(model_dict):
             model_dict[tmp_dict][key] /= numwords
 
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Программа которая на основе заданных текстов составляет "
@@ -79,17 +78,11 @@ if __name__ == '__main__':
                         help='is lowercase?')
 
     model_dict = defaultdict(lambda: defaultdict(int))
-
     file_list = create_file_list(parser.parse_args().dir)
-
     for file in file_list:
         f = get_file(file)
         update_model_dict(f, model_dict)
-
     rate_model(model_dict)
-
-
-
 
     with open(parser.parse_args().model, 'wb') as output:
         pickle.dump(dict(model_dict), output)

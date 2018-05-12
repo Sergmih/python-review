@@ -56,8 +56,9 @@ if __name__ == '__main__':
     parser.add_argument('--output', dest='output', default='stdout',
                         help='path to output file')
     parser.add_argument('--seed', dest='seed', help='it is seed')
-    parser.add_argument('--string-lenght', dest='string_lenght', default='10',
-                        help='lenght of string in output, if not set than it will be 10')
+    parser.add_argument('--string-lenght', dest='str_lenght', default='10',
+                        help='lenght of string in output, '
+                        'if not set than it will be 10')
 
     """Вызываем функцию которая загружает модель, далее проверяем задано
     ли первое слово, если нет то выбираем его случайным образом среди всех
@@ -69,4 +70,4 @@ if __name__ == '__main__':
         """генерируем seed, если его не указали"""
         current = random.choice(list(model_dict.keys()))
     generate_text(model_dict, current, parser.parse_args().lenght,
-                  parser.parse_args().output, parser.parse_args().string_lenght)
+                  parser.parse_args().output, parser.parse_args().str_lenght)
