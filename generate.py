@@ -33,7 +33,7 @@ def generate_text(model_dict, current, lenght, output, string_lenght):
         print(current, ' ', end='')
     for i in range(1, lenght):
         generation_list = list(model_dict[current].keys())
-        frequency_list = list(model_dict[current].value())
+        frequency_list = list(model_dict[current].values())
         current = numpy.random.choice(generation_list, 1, p=frequency_list)
         text += current + ' '
         current_lenght += 1
@@ -49,7 +49,7 @@ if __name__ == '__main__':
                                      " Для текста можно указать начальное "
                                      "слово, иначе оно выберется "
                                      "автоматически")
-    parser.add_argument('--lenght', dest='lenght', type=int,
+    parser.add_argument('--lenght', dest='lenght', type=int, required=True,
                         help='lenght of generated text')
     parser.add_argument('--model', dest='model', required=True,
                         help='path to file with model')
