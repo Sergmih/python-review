@@ -28,6 +28,7 @@ def generate_text(model_dict, current, lenght, output, string_lenght):
         встречаются слова,которые могут идти после него в тексте. Далее
         функцией random.choise выбираеся следующее слово и сразу выводится"""
     current_lenght = 0
+    text = []
     if output != 'stdout':
         sys.stdout = open(output, 'w')
         print(current, ' ', end='')
@@ -35,12 +36,13 @@ def generate_text(model_dict, current, lenght, output, string_lenght):
         generation_list = list(model_dict[current].keys())
         frequency_list = list(model_dict[current].values())
         current = numpy.random.choice(generation_list, 1, p=frequency_list)
-        text += current + ' '
+        text.append(current)
         current_lenght += 1
-        if current_lenght > string_lenght:
-            print(text)
-            text = ''
-            current_lenght = 0
+        if len(text) > string_lenght:
+            for word in text:
+                print(word, end=' ')
+            print()
+            text.clear()
 
 
 if __name__ == '__main__':
