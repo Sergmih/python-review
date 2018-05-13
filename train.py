@@ -34,7 +34,7 @@ def create_file_list(dir):
     if dir != 'stdin':
         for file in os.listdir(path=dir):
             if file[-4:] == ".txt":
-                file_list.append(file)
+                file_list.append(str(dir + '/' + str(file)))
     else:
         file_list.append(sys.stdin)
     return file_list
@@ -42,7 +42,8 @@ def create_file_list(dir):
 
 def get_file(file):
     try:
-        fl = open(parser.parse_args().dir + '\\' + file)
+        fl = open(file)
+        print
     except Exception:
         fl = file
     return fl

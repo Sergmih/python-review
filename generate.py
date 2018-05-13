@@ -13,7 +13,7 @@ def upload_model(path):
        Функция возвращает модель (defaultdict(dict))
        Считываем модель с помощью pickle """
     with open(path, 'rb') as input:
-        model_dict = pickle.load(input)
+        model_dict = dict(pickle.load(input))
     return model_dict
 
 
@@ -27,21 +27,19 @@ def generate_text(model_dict, current, lenght, output, string_lenght):
        для каждого слова составляем список, в котором с нужной частотой
         встречаются слова,которые могут идти после него в тексте. Далее
         функцией random.choise выбираеся следующее слово и сразу выводится"""
-    current_lenght = 0
     text = []
     if output != 'stdout':
         sys.stdout = open(output, 'w')
-        print(current, ' ', end='')
+    print(current, ' ', end='')
     for i in range(1, lenght):
+        while not model_dict.get(current):
+            current = random.choice(list(model_dict.keys()))
         generation_list = list(model_dict[current].keys())
         frequency_list = list(model_dict[current].values())
-        current = numpy.random.choice(generation_list, 1, p=frequency_list)
+        current = numpy.random.choice(generation_list, p=frequency_list)
         text.append(current)
-        current_lenght += 1
         if len(text) > string_lenght:
-            for word in text:
-                print(word, end=' ')
-            print()
+            print(' '.join(text))
             text.clear()
 
 
@@ -60,7 +58,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', help='it is seed')
     parser.add_argument('--string-lenght', dest='str_lenght', default='10',
                         help='lenght of string in output, '
-                        'if not set than it will be 10')
+                        'if not set than it will be 10', type=int)
 
     """Вызываем функцию которая загружает модель, далее проверяем задано
     ли первое слово, если нет то выбираем его случайным образом среди всех
