@@ -26,7 +26,10 @@ def create_model(current_str, islow, model_dict):
         model_dict[words[x]][words[x + 1]] += 1
     """Возвращаем последнее слово строки, чтобы
     связать его с первым словом следующей строки"""
-    return words[len(words) - 1]
+    if len(words) == 0:
+        return
+    else:
+        return words[-1]
 
 
 def create_file_list(dir):
