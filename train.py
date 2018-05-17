@@ -27,7 +27,7 @@ def create_model(current_str, islow, model_dict):
     """Возвращаем последнее слово строки, чтобы
     связать его с первым словом следующей строки"""
     if len(words) == 0:
-        return
+        return ''
     else:
         return words[-1]
 
